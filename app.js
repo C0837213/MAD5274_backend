@@ -3,7 +3,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import postRoute  from './routes/post.js';
-
+import userRoute from './routes/users.js'
 const app = express();
 
 app.use(logger('dev'));
@@ -13,6 +13,7 @@ app.use(cookieParser());
 
 // route starts here
 app.use('/post', postRoute)
+app.use('/users', userRoute)
 
 app.listen(3000, function() {
   console.log('listening on 3000')
