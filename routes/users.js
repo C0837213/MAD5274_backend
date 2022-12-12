@@ -1,6 +1,11 @@
 import express from "express";
 import mongoClient from "../helper/mongoClient.js";
-import { createUser, getAllUsers, getUser } from "../services/users.js";
+import {
+  createUser,
+  getAllUsers,
+  getUser,
+  updateUser,
+} from "../services/users.js";
 
 const router = express.Router();
 
@@ -19,6 +24,17 @@ router.post("/login", async function (req, res) {
 router.get("/", async function (req, res) {
   const result = await getAllUsers();
   res.json(result);
+});
+
+router.post("/:email", async function (req, res) {
+  const params = req.params;
+  const _user = req.body;
+  const updatedUser = await updateUser(_user);
+  if (updatedUser) {
+    res.json({ status: "success", user: updatedUser });
+  } else {
+    res.json({ status: "failed" });
+  }
 });
 
 router.post("/", async function (req, res) {

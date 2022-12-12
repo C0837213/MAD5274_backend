@@ -20,9 +20,33 @@ export const getUser = async (email) => {
   }
 };
 
+export const updateUser = async (user) => {
+  try {
+    console.log("updateUser", user);
+    const result = await userCollection.updateOne(
+      { email: user.email },
+      {
+        $set: {
+          email: user.email,
+          password: user.password,
+          fullName: user.fullName,
+          icon: user.icon,
+        },
+      }
+    );
+
+    if (result.acknowledged) {
+      const _user = await getUser(user.email);
+      return _user;
+    }
+  } catch (error) {
+    console.warn(`Error in updateUser: ${error.message}`);
+  }
+};
+
 export const createUser = async (user) => {
   try {
-    await userCollection.insertOne(user);
+    await userCollection.insertOne({ ...user, icon: "", badges: [] });
     const _user = await getUser(user.email);
     return _user;
   } catch (error) {
