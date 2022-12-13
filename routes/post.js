@@ -15,6 +15,21 @@ const getAllPost = async () => {
   return result
 }
 
+const getUserFoundItem = async (userId) => {
+  let result;
+  await postCollection.count({updatedBy: {$eq: userId}}).then(data => {
+    result = data
+  })
+  .catch(err => {console.log(err)})
+  return result
+}
+router.get("/badges/:userId", async function(req, res) {
+  const params = req.params;
+  const userId = params.userId;
+  const count = await getUserFoundItem(userId);
+  res.json(count)
+})
+
 router.get('/', async function(_req, res) {
   const result = await getAllPost()
   res.json(result)
